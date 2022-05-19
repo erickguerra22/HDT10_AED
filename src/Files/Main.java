@@ -11,6 +11,7 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
 		boolean mainEnd = false;
+		GraphManager manager = new GraphManager();
 		
 		System.out.println("Bienvenido al sistema de verificación de rutas.");
 		while(!mainEnd) {
@@ -20,6 +21,7 @@ public class Main {
 				String[] fileContent = null;
 				try { //Se encuentra el archivo
 					fileContent = FileController.readFile();
+					manager.fileToGraph(fileContent);
 					found = true;
 				} catch (IOException e) { //Si no se encuentra el archivo
 					System.out.println("\nArchivo no encontrado.\nPor favor, asegurese de que el archivo guategrafo.txt sea valido y se encuentre en la carpeta donde se ubica el programa.");
