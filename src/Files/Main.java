@@ -3,14 +3,79 @@
  */
 package Files;
 
+import java.io.IOException;
+import java.util.Scanner;
+
 public class Main {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		Scanner scan = new Scanner(System.in);
+		boolean mainEnd = false;
+		
+		System.out.println("Bienvenido al sistema de verificación de rutas.");
+		while(!mainEnd) {
+			boolean found = false;
+			boolean end = false;
+			while(!found) {
+				String[] fileContent = null;
+				try { //Se encuentra el archivo
+					fileContent = FileController.readFile();
+					found = true;
+				} catch (IOException e) { //Si no se encuentra el archivo
+					System.out.println("\nArchivo no encontrado.\nPor favor, asegurese de que el archivo guategrafo.txt sea valido y se encuentre en la carpeta donde se ubica el programa.");
+					System.out.println("Presione enter para volver a buscar el archivo.");
+					scan.nextLine();
+				}
+			}				
+			System.out.println("\nArchivo encontrado.");
+			while(!end) {
+				String menu = "\n1. Calcular la ruta mas corta entre dos ciudades.\n2. Mostrar la ciudad al centro del grafo.\n3. Modificar el grafo.\n4. Salir";
+				int option = pregunta(menu, 4, scan);
+				String origen = "";
+				String destino = "";
+				int peso = 0;
+				switch(option) { 
+				case 1:
+					System.out.println("Ingrese la ciudad de origen:");
+					origen = scan.nextLine();
+					System.out.println("Ingrese la ciudad destino:");
+					destino = scan.nextLine();
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					System.out.println("Gracias por utilizar el programa!"); 
+					end = true;
+					mainEnd = true;
+					break;
+				default: //Opcion no valida
+					System.out.println("Opcion no valida");
+					break;
+				}				
+			}
+		}	
 	}
-
+	
+	public static int pregunta(String pregunta, int opciones, Scanner scan)
+	  {
+	      boolean bucle = true;
+	      int respuesta = 0;
+	      try 
+	      {
+	          while(bucle)
+	          {
+	              System.out.println(pregunta);
+	              respuesta = scan.nextInt();
+	              scan.nextLine();
+	              if(respuesta > 0 && respuesta <= opciones) bucle = false;
+	              else System.out.println("\nRepuesta no valida.\n");
+	          }    
+	      } catch (Exception e) {
+	          System.out.println("\nRepuesta no valida. Ingrese solamente numeros.\n");
+	          respuesta = pregunta(pregunta, opciones, scan);
+	      }
+	      return respuesta;
+	  }
 }
