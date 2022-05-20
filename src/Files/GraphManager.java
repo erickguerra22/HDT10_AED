@@ -93,4 +93,24 @@ public class GraphManager {
 		}
 	}
 	
+	public String shorterRoute(String origen, String destino) {
+		String viaje = origen+", "+destino;
+		if(origen.equals(destino))
+			return "Se esta dirigiendo a la misma ciudad, la ruta es 0km";
+		if(rutas.containsKey(viaje)) {
+			String ruta = "";
+			ruta = "Ruta: "+rutas.get(viaje)[0];
+			ruta += rutas.get(viaje).length>1 ? " km\n"+"Ciudades intermedias: "+intermediateCities(rutas.get(viaje)) : " km";
+			return ruta;
+		}else
+			return "No se encontró una ruta";
+	}
+	
+	private String intermediateCities(String[] cities) {
+		String iCities = "";
+		for(int i = 1;i<cities.length;i++)
+			iCities += cities[i] + ", ";
+		return iCities.substring(0, iCities.length()-2);
+	}
+	
 }

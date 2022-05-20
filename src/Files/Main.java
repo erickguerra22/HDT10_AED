@@ -42,6 +42,7 @@ public class Main {
 					origen = scan.nextLine();
 					System.out.println("Ingrese la ciudad destino:");
 					destino = scan.nextLine();
+					System.out.println(manager.shorterRoute(origen,destino));
 					break;
 				case 2:
 					break;
