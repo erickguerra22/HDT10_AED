@@ -169,5 +169,4 @@ public class GraphManager {
 	public String getGraphCenter() {
 		return this.graphCenter;
 	}
-	
 }
