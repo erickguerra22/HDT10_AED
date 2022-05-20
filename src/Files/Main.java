@@ -11,6 +11,7 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
 		boolean mainEnd = false;
+		GraphManager manager = new GraphManager();
 		
 		System.out.println("Bienvenido al sistema de verificación de rutas.");
 		while(!mainEnd) {
@@ -20,11 +21,14 @@ public class Main {
 				String[] fileContent = null;
 				try { //Se encuentra el archivo
 					fileContent = FileController.readFile();
+					manager.fileToGraph(fileContent);
 					found = true;
 				} catch (IOException e) { //Si no se encuentra el archivo
 					System.out.println("\nArchivo no encontrado.\nPor favor, asegurese de que el archivo guategrafo.txt sea valido y se encuentre en la carpeta donde se ubica el programa.");
 					System.out.println("Presione enter para volver a buscar el archivo.");
 					scan.nextLine();
+				} catch (InvalidGraph e) {
+					System.out.println("El grafo contiene vertices no conectados.");
 				}
 			}				
 			System.out.println("\nArchivo encontrado.");
@@ -40,10 +44,36 @@ public class Main {
 					origen = scan.nextLine();
 					System.out.println("Ingrese la ciudad destino:");
 					destino = scan.nextLine();
+					System.out.println(manager.shorterRoute(origen,destino));
 					break;
 				case 2:
+					System.out.println("La ciuad al centro del grafo es: "+ manager.getGraphCenter());
 					break;
 				case 3:
+					String menuMod = "";
+					System.out.println("Indique el tipo de modificacion a realizar.");
+					menuMod = "1. Interrupcion de trafico entre dos ciudades.\n2. Nueva ruta entre dos ciudades";
+					option = pregunta(menuMod,2,scan);
+					switch(option) {
+					case 1:
+						System.out.println("Indique la ciudad de origen:");
+						origen = scan.nextLine();
+						System.out.println("Indique la ciudad destino:");
+						destino = scan.nextLine();
+						System.out.println(manager.breakRoute(origen,destino));
+						break;
+					case 2:
+						System.out.println("Indique la ciudad de origen:");
+						origen = scan.nextLine();
+						System.out.println("Indique la ciudad destino:");
+						destino = scan.nextLine();
+						peso = numeroEntero("Indique la cantidad de kilometros entre ambas ciudades:", scan);
+//						System.out.println(manager.newRoute(origen,destino,peso));
+						break;
+					default:
+						System.out.println("Opcion no valida");
+						break;
+					}
 					break;
 				case 4:
 					System.out.println("Gracias por utilizar el programa!"); 
@@ -78,4 +108,24 @@ public class Main {
 	      }
 	      return respuesta;
 	  }
+	public static int numeroEntero(String pregunta, Scanner scan) {
+		boolean bucle = true;
+		int num = 0;
+		try 
+		{
+			while(bucle)
+			{
+				System.out.println(pregunta);
+				num = scan.nextInt();
+				scan.nextLine();
+				if(num > 0) bucle = false;
+				else System.out.println("\nRepuesta no valida.\n");
+			}    
+		} catch (Exception e) {
+			scan.nextLine();
+			System.out.println("\nRepuesta no valida. Ingrese solamente numeros.\n");
+			num = numeroEntero(pregunta, scan);
+		}
+		return num;
+	}
 }
