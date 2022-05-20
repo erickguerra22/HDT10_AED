@@ -53,11 +53,6 @@ public class GraphManager {
 					}
 					if(!foundAdy)
 						pesos[i][j] = Double.POSITIVE_INFINITY;
-					if(adyacencias<1) {
-						i = vertices.size();
-						j = vertices.size();
-						throw new InvalidGraph();
-					}
 				}
 				
 			}
@@ -68,6 +63,7 @@ public class GraphManager {
 	}
 	
 	private void floyd(Double[][] pesos){
+		rutas = new HashMap<String,String[]>();
 		ArrayList<String> ruta = new ArrayList<String>();
 		for(int i=0;i<vertices.size();i++) {
 			for(int j=0;j<vertices.size();j++) {
@@ -171,9 +167,8 @@ public class GraphManager {
 		}else
 			return"No se ha encontrado la ruta especificada.";
 	}
-	
 
-	/*public String newRoute(String origen, String destino, int peso) {
+	public String newRoute(String origen, String destino, int peso) {
 		String[] ruta = null;
 		int index = -1;
 		for(int i=0;i<aristas.size();i++) {
@@ -187,8 +182,15 @@ public class GraphManager {
 			if(Integer.parseInt(ruta[2])<peso)
 				return "Ya existe una ruta entre estas ciudades, con una distancia menor.";
 			else {
-				aristas.get(index)[2] = String.valueOf(peso);
-				return "Ya existe una ruta entre estas ciudades, se ha modificado la distancia.";
+				try {
+					aristas.get(index)[2] = String.valueOf(peso);
+					matrizAdyacencias();
+					return "Ya existe una ruta entre estas ciudades, se ha modificado la distancia.";
+				}catch(InvalidGraph e) {
+					return "Ha ocurrido un error al actualizar el grafo.";
+				}
+				
+	
 			}
 		}else {
 			String[] newRoute = {origen,destino,String.valueOf(peso)};
@@ -200,7 +202,7 @@ public class GraphManager {
 				return "Ha ocurrido un error al actualizar el grafo.";
 			}
 		}
-	}*/
+	}
 	
 	public String getGraphCenter() {
 		return this.graphCenter;
