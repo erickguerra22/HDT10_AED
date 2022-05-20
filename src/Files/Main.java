@@ -45,6 +45,7 @@ public class Main {
 					System.out.println(manager.shorterRoute(origen,destino));
 					break;
 				case 2:
+					System.out.println("La ciuad al centro del grafo es: "+ manager.getGraphCenter());
 					break;
 				case 3:
 					break;

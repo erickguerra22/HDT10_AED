@@ -82,6 +82,10 @@ public class GraphManager {
 				}
 			}
 		}
+<<<<<<< Updated upstream
+=======
+		graphCenter(pesos);
+>>>>>>> Stashed changes
 	}
 	
 	private void getIntermediateCities(ArrayList<String> ruta, String key) {
@@ -93,6 +97,28 @@ public class GraphManager {
 		}
 	}
 	
+<<<<<<< Updated upstream
+=======
+	public void graphCenter(Double[][] pesos) {
+		Double[] eccentricities = new Double[vertices.size()];
+		for(int i=0;i<vertices.size();i++) {
+			for(int j=0;j<vertices.size();j++) {
+				if(eccentricities[j]==null)
+					eccentricities[j]=pesos[i][j];
+				else if (pesos[i][j]>eccentricities[j])
+					eccentricities[j]=pesos[i][j];
+			}
+		}
+		int min = eccentricities[0].intValue();
+		for(int i=0;i<vertices.size();i++) {
+			if(eccentricities[i]<min) {
+				min = eccentricities[i].intValue();
+				graphCenter = vertices.get(i);
+			}
+		}
+	}
+	
+>>>>>>> Stashed changes
 	public String shorterRoute(String origen, String destino) {
 		String viaje = origen+", "+destino;
 		if(origen.equals(destino))
@@ -113,4 +139,11 @@ public class GraphManager {
 		return iCities.substring(0, iCities.length()-2);
 	}
 	
+<<<<<<< Updated upstream
+=======
+	public String getGraphCenter() {
+		return this.graphCenter;
+	}
+	
+>>>>>>> Stashed changes
 }
