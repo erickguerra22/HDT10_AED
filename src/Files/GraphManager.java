@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * @author erick
+ * @author Erick Guerra, Pablo Zamora, Diego Aquino
  *
  */
 public class GraphManager {
 	private ArrayList<String[]> aristas = new ArrayList<String[]>();
-	private HashMap<String, String[]> rutas=new HashMap<String, String[]>();
+	private HashMap<String, String[]> rutas;
 	private ArrayList<String> vertices = new ArrayList<String>();
 	private String graphCenter = "";
 	
-	public void fileToGraph(String[] lines){
+	public void fileToGraph(String[] lines) throws InvalidGraph {
 		for(String l : lines) {
 			String[] line = l.split(" ");
 			if(!aristas.contains(line))
@@ -29,10 +29,12 @@ public class GraphManager {
 		matrizAdyacencias();
 	}
 	
-	private void matrizAdyacencias(){
+	private void matrizAdyacencias() throws InvalidGraph {
+		rutas = new HashMap<String, String[]>();
 		Double[][] pesos = new Double[vertices.size()][vertices.size()];
 		for(int i =0; i<vertices.size();i++) {
 			for(int j=0;j<vertices.size();j++) {
+				int adyacencias = 0;
 				if(i==j)
 					pesos[i][j] = 0.00;
 				else {
@@ -41,11 +43,18 @@ public class GraphManager {
 						if(a[0].equals(vertices.get(i))&&a[1].equals(vertices.get(j))) {
 							pesos[i][j] = Double.parseDouble(a[2]);
 							foundAdy = true;
+							adyacencias++;
 						}
 					}
 					if(!foundAdy)
 						pesos[i][j] = Double.POSITIVE_INFINITY;
+					if(adyacencias<1) {
+						i = vertices.size();
+						j = vertices.size();
+						throw new InvalidGraph();
+					}
 				}
+				
 			}
 		}
 		floyd(pesos);
@@ -94,6 +103,26 @@ public class GraphManager {
 		}
 	}
 	
+	public String shorterRoute(String origen, String destino) {
+		String viaje = origen+", "+destino;
+		if(origen.equals(destino))
+			return "Se esta dirigiendo a la misma ciudad, la ruta es 0km";
+		if(rutas.containsKey(viaje)) {
+			String ruta = "";
+			ruta = "Ruta: "+rutas.get(viaje)[0];
+			ruta += rutas.get(viaje).length>1 ? " km\n"+"Ciudades intermedias: "+intermediateCities(rutas.get(viaje)) : " km";
+			return ruta;
+		}else
+			return "No se encontró una ruta";
+	}
+	
+	private String intermediateCities(String[] cities) {
+		String iCities = "";
+		for(int i = 1;i<cities.length;i++)
+			iCities += cities[i] + ", ";
+		return iCities.substring(0, iCities.length()-2);
+	}
+	
 	public void graphCenter(Double[][] pesos) {
 		Double[] eccentricities = new Double[vertices.size()];
 		for(int i=0;i<vertices.size();i++) {
@@ -113,25 +142,53 @@ public class GraphManager {
 		}
 	}
 	
-	public String shorterRoute(String origen, String destino) {
-		String viaje = origen+", "+destino;
-		if(origen.equals(destino))
-			return "Se esta dirigiendo a la misma ciudad, la ruta es 0km";
-		if(rutas.containsKey(viaje)) {
-			String ruta = "";
-			ruta = "Ruta: "+rutas.get(viaje)[0];
-			ruta += rutas.get(viaje).length>1 ? " km\n"+"Ciudades intermedias: "+intermediateCities(rutas.get(viaje)) : " km";
-			return ruta;
+	
+	public String breakRoute(String origen, String destino) {
+		String[] ruta = null;
+		for(String[] a : aristas) {
+			if(a[0].equals(origen) && a[1].equals(destino))
+				ruta = a;
+		}
+		if(ruta != null) {
+			aristas.remove(ruta);
+			try {
+				matrizAdyacencias();
+				return "Ruta eliminada correctamente, se han recalculado las rutas mas cortas.";
+			} catch (InvalidGraph e) {
+				return "Ha ocurrido un error al tratar de eliminar esta ruta.";
+			}
 		}else
-			return "No se encontrï¿½ una ruta";
+			return"No se ha encontrado la ruta especificada.";
 	}
 	
-	private String intermediateCities(String[] cities) {
-		String iCities = "";
-		for(int i = 1;i<cities.length;i++)
-			iCities += cities[i] + ", ";
-		return iCities.substring(0, iCities.length()-2);
-	}
+	/*public String newRoute(String origen, String destino, int peso) {
+		String[] ruta = null;
+		int index = -1;
+		for(int i=0;i<aristas.size();i++) {
+			String[] arista = aristas.get(i);
+			if(arista[0].equals(origen) && arista[1].equals(destino)) {
+				ruta = arista;
+				index = i;
+			}
+		}
+		if(ruta != null) {
+			if(Integer.parseInt(ruta[2])<peso)
+				return "Ya existe una ruta entre estas ciudades, con una distancia menor.";
+			else {
+				aristas.get(index)[2] = String.valueOf(peso);
+				return "Ya existe una ruta entre estas ciudades, se ha modificado la distancia.";
+			}
+		}else {
+			String[] newRoute = {origen,destino,String.valueOf(peso)};
+			aristas.add(newRoute);
+			try {
+				matrizAdyacencias();
+				return "Ruta agregada. Se han recalculado las rutas mas cortas.";
+			}catch(InvalidGraph e) {
+				return "Ha ocurrido un error al actualizar el grafo.";
+			}
+		}
+	}*/
 	
 	public String getGraphCenter() {
 		return this.graphCenter;
