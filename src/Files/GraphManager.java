@@ -19,22 +19,27 @@ public class GraphManager {
 	public void fileToGraph(String[] lines) throws InvalidGraph {
 		for(String l : lines) {
 			String[] line = l.split(" ");
-			if(!aristas.contains(line))
+			String[] inverted = l.split(" ");
+			String origen = inverted[0];
+			inverted[0] = inverted[1];
+			inverted[1] = origen;
+			if(!aristas.contains(line)) {
 				aristas.add(line);
-			if(!vertices.contains(line[0]))
-				vertices.add(line[0]);
+				aristas.add(inverted);
+			}
 			if(!vertices.contains(line[1]))
 				vertices.add(line[1]);
+			if(!vertices.contains(line[0]))
+				vertices.add(line[0]);
 		}
 		matrizAdyacencias();
 	}
 	
 	private void matrizAdyacencias() throws InvalidGraph {
-		rutas = new HashMap<String, String[]>();
 		Double[][] pesos = new Double[vertices.size()][vertices.size()];
 		for(int i =0; i<vertices.size();i++) {
+			int adyacencias = 0;
 			for(int j=0;j<vertices.size();j++) {
-				int adyacencias = 0;
 				if(i==j)
 					pesos[i][j] = 0.00;
 				else {
@@ -56,6 +61,8 @@ public class GraphManager {
 				}
 				
 			}
+			if(adyacencias<1)
+				throw new InvalidGraph();
 		}
 		floyd(pesos);
 	}
@@ -134,6 +141,7 @@ public class GraphManager {
 			}
 		}
 		int min = eccentricities[0].intValue();
+		graphCenter = vertices.get(0);
 		for(int i=0;i<vertices.size();i++) {
 			if(eccentricities[i]<min) {
 				min = eccentricities[i].intValue();
@@ -142,15 +150,18 @@ public class GraphManager {
 		}
 	}
 	
-	
 	public String breakRoute(String origen, String destino) {
 		String[] ruta = null;
+		String[] inverted = null;
 		for(String[] a : aristas) {
 			if(a[0].equals(origen) && a[1].equals(destino))
 				ruta = a;
+			if(a[1].equals(origen) && a[0].equals(destino))
+				inverted = a;
 		}
 		if(ruta != null) {
 			aristas.remove(ruta);
+			aristas.remove(inverted);
 			try {
 				matrizAdyacencias();
 				return "Ruta eliminada correctamente, se han recalculado las rutas mas cortas.";
@@ -161,6 +172,7 @@ public class GraphManager {
 			return"No se ha encontrado la ruta especificada.";
 	}
 	
+
 	/*public String newRoute(String origen, String destino, int peso) {
 		String[] ruta = null;
 		int index = -1;
@@ -193,5 +205,4 @@ public class GraphManager {
 	public String getGraphCenter() {
 		return this.graphCenter;
 	}
-	
 }
