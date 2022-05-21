@@ -119,7 +119,7 @@ public class GraphManager {
 	/**
 	 * Se encarga de determinar si los datos almacenados corresponden al formato de un grafo valido.
 	 * @param matriz 
-	 * @return
+	 * @return boolean
 	 */
 	private boolean validGraph(Double[][] matriz) {
 		for(Double[] d : matriz) {
@@ -130,7 +130,7 @@ public class GraphManager {
 	}
 	
 	/**
-	 * Permite determinar la ciudad intermedia del grafo.
+	 * Permite determinar las ciudades intermedias de una ruta.
 	 * @param ruta Almacena las diferentes rutas entre ciudades.
 	 * @param key Identificador de la ruta.
 	 */
@@ -284,6 +284,10 @@ public class GraphManager {
 		}
 	}
 	
+	/**
+	 * Reescribe el archivo guategrafo.txt con la informacion generada en la ejecucion.
+	 * @throws IOException
+	 */
 	public void rewriteFile() throws IOException {
 		ArrayList<String> parejas = new ArrayList<String>();
 		for(String[] a : aristas) {
