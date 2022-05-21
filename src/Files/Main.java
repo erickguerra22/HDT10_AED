@@ -47,7 +47,7 @@ public class Main {
 					System.out.println(manager.shorterRoute(origen,destino));
 					break;
 				case 2:
-					System.out.println("La ciuad al centro del grafo es: "+ manager.getGraphCenter());
+					System.out.println("La ciudad al centro del grafo es: "+ manager.getGraphCenter());
 					break;
 				case 3:
 					String menuMod = "";
@@ -68,7 +68,13 @@ public class Main {
 						System.out.println("Indique la ciudad destino:");
 						destino = scan.nextLine();
 						peso = numeroEntero("Indique la cantidad de kilometros entre ambas ciudades:", scan);
-//						System.out.println(manager.newRoute(origen,destino,peso));
+						try {
+							System.out.println(manager.newRoute(origen,destino,peso));
+						}catch (InvalidGraph e) {
+							System.out.println("Ha ocurrido un error al manipular el grafo, saliendo del programa...");
+							end = true;
+							mainEnd = true;
+						}
 						break;
 					default:
 						System.out.println("Opcion no valida");
