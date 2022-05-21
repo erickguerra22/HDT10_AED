@@ -68,7 +68,13 @@ public class Main {
 						System.out.println("Indique la ciudad destino:");
 						destino = scan.nextLine();
 						peso = numeroEntero("Indique la cantidad de kilometros entre ambas ciudades:", scan);
-						System.out.println(manager.newRoute(origen,destino,peso));
+						try {
+							System.out.println(manager.newRoute(origen,destino,peso));
+						}catch (InvalidGraph e) {
+							System.out.println("Ha ocurrido un error al manipular el grafo, saliendo del programa...");
+							end = true;
+							mainEnd = true;
+						}
 						break;
 					default:
 						System.out.println("Opcion no valida");

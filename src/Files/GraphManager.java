@@ -167,7 +167,7 @@ public class GraphManager {
 			return"No se ha encontrado la ruta especificada.";
 	}
 	
-	public String newRoute(String origen, String destino, int peso) {
+	public String newRoute(String origen, String destino, int peso) throws InvalidGraph {
 		String[] ruta = null;
 		String[] inverted = null;
 		int indexA = -1;
@@ -198,12 +198,20 @@ public class GraphManager {
 			}
 		}else {
 			String[] newRoute = {origen,destino,String.valueOf(peso)};
+			String[] invertedNew = {destino,origen,String.valueOf(peso)};
 			aristas.add(newRoute);
+			aristas.add(invertedNew);
+			vertices.add(origen);
+			vertices.add(destino);
 			try {
 				matrizAdyacencias();
 				return "Ruta agregada. Se han recalculado las rutas mas cortas.";
 			}catch(InvalidGraph e) {
-				return "Ha ocurrido un error al actualizar el grafo.";
+				aristas.remove(newRoute);
+				vertices.remove(origen);
+				vertices.remove(destino);
+				matrizAdyacencias();
+				return "Incluir esta ruta convertiria al grafo en no convexo, se ha omitido la accion.";
 			}
 		}
 	}
