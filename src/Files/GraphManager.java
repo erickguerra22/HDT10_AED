@@ -3,6 +3,7 @@
  */
 package Files;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -225,6 +226,18 @@ public class GraphManager {
 				matrizAdyacencias();
 				return "Incluir esta ruta convertiria al grafo en no convexo, se ha omitido la accion.";
 			}
+		}
+	}
+	
+	public void rewriteFile() throws IOException {
+		ArrayList<String> parejas = new ArrayList<String>();
+		for(String[] a : aristas) {
+			String viaje = a[0] + ", "+a[1];
+			String invertedViaje = a[1]+", "+a[0];
+			if(!parejas.contains(viaje) && !parejas.contains(invertedViaje))
+				FileController.writeFile(a[0] + " " + a[1] + " "+a[2]+"\n");
+			parejas.add(viaje);
+			parejas.add(invertedViaje);
 		}
 	}
 	

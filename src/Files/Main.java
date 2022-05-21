@@ -91,7 +91,13 @@ public class Main {
 					break;
 				}				
 			}
-		}	
+		}
+		FileController.deleteFile();
+		try {
+			manager.rewriteFile();
+		}catch(IOException e) {
+			System.out.println("Ha ocurrido un error a reescribir el archivo.");
+		}
 	}
 	
 	public static int pregunta(String pregunta, int opciones, Scanner scan)

@@ -47,17 +47,21 @@ public class FileController {
 	 * @param text. Contenido del archivo
 	 * @throws IOException
 	 */
-	public static void writeFile(String text, String fileName) throws IOException {
+	public static void writeFile(String text) throws IOException {
 		File file = new File(PATH);
         if (!file.exists()) {
             file.createNewFile();
         }
 
-        FileWriter fw = new FileWriter(file);
+        FileWriter fw = new FileWriter(file, true);
 
         fw.write(text);
         fw.close();        
-
     }
+	
+	public static void deleteFile() {
+		File file = new File(PATH);
+		file.delete();
+	}
 	
 }
