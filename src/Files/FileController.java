@@ -9,12 +9,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Clase FileController.
- * @author Erick Guerra
- * @version 21/03/2022
+ * Clase FileController. Permite la manipulación de archivos de texto.
+ * @author Erick Guerra, Diego Morales y Pablo Zamora.
+ * @version 20/05/2022
  *
  */
-
 public class FileController {
 	
 	public static final String PATH = System.getProperty("user.dir") + "\\guategrafo.txt";

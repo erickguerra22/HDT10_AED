@@ -6,3 +6,5 @@ Guatemala Mixco 15
 Guatemala Antigua 40
 Escuintla Guatemala 70
 Guatemala Jalisco 90
+Mexico Guatemala 50
+Jalisco Taxisco 100

@@ -6,8 +6,18 @@ package Files;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Clase principal del programa.
+ * @author Erick Guerra, Diego Morales y Pablo Zamora
+ * @version 20/05/2020
+ *
+ */
 public class Main {
 
+	/**
+	 * Metodo main del programa.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
 		boolean mainEnd = false;
@@ -100,6 +110,13 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Se encarga de solicitar al usuario que ingrese un dato en especifico y validarlo.
+	 * @param pregunta. Mensaje a desplegar.
+	 * @param opciones. Opciones consideradas como validas.
+	 * @param scan Objeto Scanner.
+	 * @return int.
+	 */
 	public static int pregunta(String pregunta, int opciones, Scanner scan)
 	  {
 	      boolean bucle = true;
@@ -121,6 +138,13 @@ public class Main {
 	      }
 	      return respuesta;
 	  }
+	
+	/**
+	 * Se encarga de solicitar al usuario que ingrese un dato de tipo entero.
+	 * @param pregunta Mensaje a desplegar al usuario.
+	 * @param scan Objeto Scanner
+	 * @return Int.
+	 */
 	public static int numeroEntero(String pregunta, Scanner scan) {
 		boolean bucle = true;
 		int num = 0;
