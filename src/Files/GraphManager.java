@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class GraphManager {
 	private ArrayList<String[]> aristas = new ArrayList<String[]>();
-	private HashMap<String, String[]> rutas=new HashMap<String, String[]>();
+	private HashMap<String, String[]> rutas;
 	private ArrayList<String> vertices = new ArrayList<String>();
 	private String graphCenter = "";
 	
@@ -62,6 +62,7 @@ public class GraphManager {
 	}
 	
 	private void floyd(Double[][] pesos){
+		rutas=new HashMap<String, String[]>();
 		ArrayList<String> ruta = new ArrayList<String>();
 		for(int i=0;i<vertices.size();i++) {
 			for(int j=0;j<vertices.size();j++) {
@@ -164,6 +165,47 @@ public class GraphManager {
 			}
 		}else
 			return"No se ha encontrado la ruta especificada.";
+	}
+	
+	public String newRoute(String origen, String destino, int peso) {
+		String[] ruta = null;
+		String[] inverted = null;
+		int indexA = -1;
+		int indexB = -1;
+		for(int i=0;i<aristas.size();i++) {
+			String[] arista = aristas.get(i);
+			if(arista[0].equals(origen) && arista[1].equals(destino)) {
+				ruta = arista;
+				indexA = i;
+			}
+			if(arista[1].equals(origen) && arista[0].equals(destino)) {
+				inverted = arista;
+				indexB = i;
+			}
+		}
+		if(ruta != null) {
+			if(Integer.parseInt(ruta[2])<peso)
+				return "Ya existe una ruta entre estas ciudades, con una distancia menor.";
+			else {
+				aristas.get(indexA)[2] = String.valueOf(peso);
+				aristas.get(indexB)[2] = String.valueOf(peso);
+				try {
+					matrizAdyacencias();
+					return "Ya existe una ruta entre estas ciudades, se ha modificado la distancia.";
+				} catch (InvalidGraph e) {
+					return "Ha ocurrido un error al actualizar el grafo.";
+				}
+			}
+		}else {
+			String[] newRoute = {origen,destino,String.valueOf(peso)};
+			aristas.add(newRoute);
+			try {
+				matrizAdyacencias();
+				return "Ruta agregada. Se han recalculado las rutas mas cortas.";
+			}catch(InvalidGraph e) {
+				return "Ha ocurrido un error al actualizar el grafo.";
+			}
+		}
 	}
 	
 	public String getGraphCenter() {

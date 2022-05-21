@@ -68,7 +68,7 @@ public class Main {
 						System.out.println("Indique la ciudad destino:");
 						destino = scan.nextLine();
 						peso = numeroEntero("Indique la cantidad de kilometros entre ambas ciudades:", scan);
-//						System.out.println(manager.newRoute(origen,destino,peso));
+						System.out.println(manager.newRoute(origen,destino,peso));
 						break;
 					default:
 						System.out.println("Opcion no valida");
