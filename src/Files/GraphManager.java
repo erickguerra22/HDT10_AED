@@ -4,6 +4,7 @@
 package Files;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -55,13 +56,13 @@ public class GraphManager {
 						pesos[i][j] = Double.POSITIVE_INFINITY;
 				}
 			}
-			if(adyacencias<2)
+			if(adyacencias<1)
 				throw new InvalidGraph();
 		}
 		floyd(pesos);
 	}
 	
-	private void floyd(Double[][] pesos){
+	private void floyd(Double[][] pesos) throws InvalidGraph{
 		rutas=new HashMap<String, String[]>();
 		ArrayList<String> ruta = new ArrayList<String>();
 		for(int i=0;i<vertices.size();i++) {
@@ -93,7 +94,17 @@ public class GraphManager {
 				}
 			}
 		}
+		if(!validGraph(pesos))
+			throw new InvalidGraph();
 		graphCenter(pesos);
+	}
+	
+	private boolean validGraph(Double[][] matriz) {
+		for(Double[] d : matriz) {
+			if(Arrays.asList(d).contains(Double.POSITIVE_INFINITY))
+				return false;
+		}
+		return true;
 	}
 	
 	private void getIntermediateCities(ArrayList<String> ruta, String key) {
@@ -208,6 +219,7 @@ public class GraphManager {
 				return "Ruta agregada. Se han recalculado las rutas mas cortas.";
 			}catch(InvalidGraph e) {
 				aristas.remove(newRoute);
+				aristas.remove(invertedNew);
 				vertices.remove(origen);
 				vertices.remove(destino);
 				matrizAdyacencias();
