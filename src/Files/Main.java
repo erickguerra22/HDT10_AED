@@ -110,6 +110,7 @@ public class Main {
 	          }    
 	      } catch (Exception e) {
 	          System.out.println("\nRepuesta no valida. Ingrese solamente numeros.\n");
+	          scan.nextLine();
 	          respuesta = pregunta(pregunta, opciones, scan);
 	      }
 	      return respuesta;
